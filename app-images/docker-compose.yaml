@@ -1,0 +1,9 @@
+
+services:
+  web-app:
+    build: ./lucky-number
+    environment:
+      GENERATOR_HOST: 'generator'
+      GENERATOR_PORT: '5000'
+  generator:
+    build: ./generator
