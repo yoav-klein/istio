@@ -5,7 +5,7 @@ metadata:
   namespace: lucky-number-app
 spec:
   hosts:
-  - generator.lucky-number-app.svc.cluster.local
+  - mock.lucky-number-app.svc.cluster.local
   gateways:
   - mesh # applies to all the sidecars in the mesh
   http:
