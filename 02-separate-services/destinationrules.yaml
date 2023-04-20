@@ -1,0 +1,35 @@
+kind: DestinationRule
+apiVersion: networking.istio.io/v1beta1
+metadata:
+  name: numbers
+  namespace: content-generator
+spec:
+  host: numbers.content-generator.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---
+kind: DestinationRule
+apiVersion: networking.istio.io/v1beta1
+metadata:
+  name: names
+  namespace: content-generator
+spec:
+  host: names.content-generator.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2

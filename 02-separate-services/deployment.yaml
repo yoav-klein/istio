@@ -1,0 +1,149 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: content-generator
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: content-generator
+  namespace: content-generator
+spec:
+  selector:
+    app: content-generator
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: names-v1
+  namespace: content-generator
+  labels:
+    app: names
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: names
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: names
+        version: v1
+    spec:
+      containers:
+      - name: names
+        image: yoavklein3/names-generator:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: names-v2
+  namespace: content-generator
+  labels:
+    app: names
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: names
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: names
+        version: v2
+    spec:
+      containers:
+      - name: names 
+        image: yoavklein3/names-generator:0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: names
+  namespace: content-generator
+spec:
+  selector:
+    app: names
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: numbers-v1
+  namespace: content-generator
+  labels:
+    app: numbers
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: numbers
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: numbers
+        version: v1
+    spec:
+      containers:
+      - name: numbers
+        image: yoavklein3/numbers-generator:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: numbers-v2
+  namespace: content-generator
+  labels:
+    app: numbers
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: numbers
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: numbers
+        version: v2
+    spec:
+      containers:
+      - name: numbers
+        image: yoavklein3/numbers-generator:0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: numbers
+  namespace: content-generator
+spec:
+  selector:
+    app: numbers
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+

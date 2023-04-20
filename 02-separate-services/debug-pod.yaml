@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: debug
+  namespace: content-generator
+spec:
+  containers:
+    - name: debug
+      image: yoavklein3/net-tools:latest
+      command: ["sleep", "3600"]
+
