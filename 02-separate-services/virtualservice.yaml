@@ -19,7 +19,7 @@ spec:
         subset: v1
     - weight: 10 
       destination:
-        host: names.content-genearator.svc.cluster.local
+        host: names.content-generator.svc.cluster.local
         subset: v2
   - match:
       - uri:
@@ -31,6 +31,6 @@ spec:
         subset: v1
     - weight: 10
       destination:
-        host: numbers.content-geneartor.svc.cluster.local
+        host: numbers.content-generator.svc.cluster.local
         subset: v2
 
