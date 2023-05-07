@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: httpbin-gateway
+  name: my-gateway
 spec:
   # The selector matches the ingress gateway pod labels.
   # If you installed Istio using Helm following the standard documentation, this would be "istio=ingress"
@@ -9,8 +9,14 @@ spec:
     istio: ingressgateway
   servers:
   - port:
-      number: 443
-      name: http
+      number: 80
+      name: numbers
       protocol: HTTP
     hosts:
-    - "httpbin.example.com"
+    - "numbers.example.com"
+  - port:
+      number: 80
+      name: names
+      protocol: HTTP
+    hosts:
+    - "names.example.com"

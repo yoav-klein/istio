@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: names
+  labels:
+    app: names
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: names
+  template:
+    metadata:
+      labels:
+        app: names
+    spec:
+      containers:
+      - name: names
+        image: yoavklein3/names-generator:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: names
+spec:
+  selector:
+    app: names
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: numbers
+  labels:
+    app: numbers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: numbers
+  template:
+    metadata:
+      labels:
+        app: numbers
+    spec:
+      containers:
+      - name: numbers
+        image: yoavklein3/numbers-generator:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: numbers
+spec:
+  selector:
+    app: numbers
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+
