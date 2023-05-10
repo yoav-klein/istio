@@ -54,3 +54,9 @@ $ curl "$INGRESS_HOST:$INGRESS_PORT/headers" -s -o /dev/null -w "%{http_code}\n"
 $ curl "$INGRESS_HOST:$INGRESS_PORT/ip" -s -o /dev/null -w "%{http_code}\n"
 200
 ```
+
+## Cleanup
+---
+```
+$ kubectl delete ns foo
+```
