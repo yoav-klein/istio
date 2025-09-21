@@ -3,12 +3,16 @@
  */
 package org.example;
 
+import java.util.Map;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpEntity;
 
 @RestController
 @SpringBootApplication
@@ -17,13 +21,23 @@ public class MyApplication {
     RestTemplate restTemplate = new RestTemplate();
 	
     @RequestMapping("/")
-	String home() {
+	String home(HttpEntity<String> entity) {
         try {
+
+            System.out.println("Request Headers: ");
+            HttpHeaders headers = entity.getHeaders();
+            for(Map.Entry<String,String> e : headers.entrySet()) {
+                System.out.println(e.getKey());
+                List<String> l = e.getValue();
+                for(String v : l) {
+                    System.out.println(v);
+                }
+            }
             // a call to google, just to see it in the UI
             ResponseEntity<String> response = restTemplate.getForEntity("https://google.com", String.class);
             response = restTemplate.getForEntity("http://backend", String.class);
             System.out.println("Status Code: " + response.getStatusCode());
-            System.out.println("Response Body: " + response.getBody());
+
             return response.getBody();
         } catch(Exception e) {
             return "Exception";
