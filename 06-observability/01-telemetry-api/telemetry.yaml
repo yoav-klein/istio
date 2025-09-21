@@ -1,0 +1,27 @@
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: remove-tags
+  namespace: default
+spec:
+  metrics:
+    - providers:
+        - name: prometheus
+      overrides:
+        - match:
+            mode: CLIENT_AND_SERVER
+            metric: REQUEST_COUNT
+          tagOverrides:
+            response_code:
+              operation: REMOVE
+            source_workload:
+              operation: REMOVE
+            destination_x:
+              value: filter_state.downstream_peer.app
+            uri_path:
+                #value: string("my/request/path").split('/').join('?')
+                value: request.url_path
+        - match:
+            mode: CLIENT_AND_SERVER
+            metric: REQUEST_DURATION
+          disabled: true

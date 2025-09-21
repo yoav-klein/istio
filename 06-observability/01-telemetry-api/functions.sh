@@ -1,7 +1,11 @@
 #!/bin/bash
 
+function send_requests_constant() {
+    while $true; do send_request; done
+}
+
 function send_request() {
-    kubectl exec client -- curl httpbin-service/delay/1
+    kubectl exec client -- curl httpbin-service/delay/2
 }
 
 function get_metrics() {
