@@ -41,7 +41,7 @@ spec:
       containers:
         - name: frontend
           imagePullPolicy: Always
-          image: yoavklein3/istio-tracing-client:0.1
+          image: yoavklein3/istio-tracing-frontend:0.1
           ports:
             - containerPort: 8080
 ---
