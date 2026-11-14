@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lucky-number-app
+  labels:
+    istio.io/dataplane-mode: ambient
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generator-v1
+  namespace: lucky-number-app
+  labels:
+    app: generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generator
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: generator
+        version: v1
+    spec:
+      containers:
+      - name: generator
+        image: yoavklein3/generator:0.1
+        ports:
+        - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: lucky-number-app
+  name: generator-v2
+  labels:
+    app: generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generator
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: generator
+        version: v2
+    spec:
+      containers:
+      - name: generator
+        image: yoavklein3/generator:0.2
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: generator-v1
+  namespace: lucky-number-app
+spec:
+  selector:
+    app: generator
+    version: v1
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: generator-v2
+  namespace: lucky-number-app
+spec:
+  selector:
+    app: generator
+    version: v2
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: generator
+  namespace: lucky-number-app
+spec:
+  selector:
+    app: something
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
