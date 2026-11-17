@@ -4,6 +4,7 @@ metadata:
   name: lucky-number-app
   labels:
     istio.io/dataplane-mode: ambient
+    istio.io/use-waypoint: waypoint
 ---
 apiVersion: apps/v1
 kind: Deployment
