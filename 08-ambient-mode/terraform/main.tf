@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/helm"
       version = "~> 3.0"
     }
+
+    kubernetes = {
+        source = "hashicorp/kubernetes"
+        version = "~> 3.5"
+    }
   }
 }
 
@@ -11,6 +16,10 @@ provider "helm" {
   kubernetes = {
     config_path = "~/.kube/config"
   }
+}
+
+provider "kubernetes" {
+    config_path = "~/.kube/config"
 }
 
 resource "helm_release" "base" {
@@ -79,4 +88,20 @@ resource "helm_release" "ztunnel" {
 
   wait    = true
   timeout = 300
+}
+
+data "http" "gateway_crds" {
+    url = "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.0/standard-install.yaml"
+}
+
+resource "kubernetes_manifest" "gateway_crds" {
+    count = length(provider::kubernetes::manifest_decode_multi(data.http.gateway_crds.response_body))
+
+    manifest = provider::kubernetes::manifest_decode_multi(data.http.gateway_crds.response_body)[count.index]
+}
+
+resource "kubernetes_manifest" "waypoint" {
+    depends_on = [ kubernetes_manifest.gateway_crds ]
+
+    manifest = yamldecode(file("${path.root}/files/waypoint.yaml"))
 }
