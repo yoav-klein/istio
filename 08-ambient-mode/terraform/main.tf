@@ -100,8 +100,12 @@ resource "kubernetes_manifest" "gateway_crds" {
     manifest = provider::kubernetes::manifest_decode_multi(data.http.gateway_crds.response_body)[count.index]
 }
 
+resource "kubernetes_manifest" "namespace" {
+    manifest = yamldecode(file("${path.root}/files/namespace.yaml"))
+}
+
 resource "kubernetes_manifest" "waypoint" {
-    depends_on = [ kubernetes_manifest.gateway_crds ]
+    depends_on = [ kubernetes_manifest.gateway_crds, kubernetes_manifest.namespace ]
 
     manifest = yamldecode(file("${path.root}/files/waypoint.yaml"))
 }
